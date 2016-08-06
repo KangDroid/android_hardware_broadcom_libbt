@@ -235,8 +235,8 @@ static void brcm_vnd_map_a2d_uipc_codec_info(tCODEC_INFO_SBC *codec_info)
 static tA2D_STATUS bcrm_vnd_a2dp_parse_codec_info(tCODEC_INFO_SBC *parsed_info, uint8_t *codec_info)
 {
     tA2D_STATUS status = A2D_SUCCESS;
-    UINT8   losc;
-    UINT8   mt;
+    uint8_t   losc;
+    uint8_t   mt;
 
     BTA2DPDBG("%s", __FUNCTION__);
 
