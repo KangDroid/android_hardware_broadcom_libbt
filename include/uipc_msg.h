@@ -136,8 +136,8 @@ typedef struct
     uint8_t       ack;                /* next ack seq, expected seq from peer */
     uint8_t       sent_ack;           /* last sent ack */
     uint8_t       sliding_window_size;/* window size */
-    BOOLEAN     oof_flow_control;   /* Out of Frame SW Flow Control */
-    BOOLEAN     data_integrity_type;/* Level of Data Integrity Check */
+    bool          oof_flow_control;   /* Out of Frame SW Flow Control */
+    bool         data_integrity_type;/* Level of Data Integrity Check */
     uint8_t       rx_state;           /* rx state for incoming packet processing */
 } tSLIP_SYNC_INFO;
 
@@ -165,7 +165,7 @@ typedef struct t_l2c_stream_info
     uint16_t  out_mtu;            /* Max MTU we will send             */
     uint16_t  handle;             /* The handle used with LM          */
     uint16_t  link_xmit_quota;    /* Num outstanding pkts allowed     */
-    BOOLEAN is_flushable;       /* TRUE if flushable channel        */
+    bool      is_flushable;       /* TRUE if flushable channel        */
 } tL2C_STREAM_INFO;
 
 typedef struct t_l2c_sync_to_lite_req
