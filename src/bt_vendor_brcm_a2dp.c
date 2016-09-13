@@ -271,7 +271,7 @@ static tA2D_STATUS bcrm_vnd_a2dp_parse_codec_info(tCODEC_INFO_SBC *parsed_info, 
             if(MULTI_BIT_SET(parsed_info->num_subbands))
                 status = A2D_BAD_SUBBANDS;
             if(MULTI_BIT_SET(parsed_info->alloc_method))
-                status = A2D_BAD_ALLOC_MTHD;
+                status = A2D_BAD_ALLOC_METHOD;
             if(parsed_info->bitpool_size < A2D_SBC_IE_MIN_BITPOOL || parsed_info->bitpool_size > A2D_SBC_IE_MAX_BITPOOL )
                 status = A2D_BAD_MIN_BITPOOL;
 
