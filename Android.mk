@@ -31,7 +31,7 @@ LOCAL_C_INCLUDES += \
         $(BDROID_DIR)/hci/include \
         $(BDROID_DIR)/include \
         $(BDROID_DIR)/stack/include \
-        $(BDROID_DIR)/gki/ulinux
+        $(BDROID_DIR)
 
 LOCAL_C_INCLUDES += $(bdroid_C_INCLUDES)
 LOCAL_CFLAGS += $(bdroid_CFLAGS)
