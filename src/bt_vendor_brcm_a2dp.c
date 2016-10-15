@@ -40,8 +40,8 @@
 #include <stdlib.h>
 #include "bt_hci_bdroid.h"
 #include "bt_vendor_brcm_a2dp.h"
-#include "a2d_api.h"
-#include "a2d_sbc.h"
+#include "a2dp_api.h"
+#include "a2dp_sbc.h"
 
 #if (BTA2DP_DEBUG == TRUE)
 #define BTA2DPDBG(param, ...) {ALOGD(param, ## __VA_ARGS__);}
@@ -185,98 +185,98 @@ static uint8_t brcm_vnd_a2dp_send_hci_vsc(uint16_t cmd, uint8_t *payload, uint8_
     return BT_VND_OP_RESULT_FAIL;
 }
 
-static void brcm_vnd_map_a2d_uipc_codec_info(tCODEC_INFO_SBC *codec_info)
+static void brcm_vnd_map_a2dp_uipc_codec_info(tCODEC_INFO_SBC *codec_info)
 {
     switch(codec_info->sampling_freq) {
-        case A2D_SBC_IE_SAMP_FREQ_16:
+        case A2DP_SBC_IE_SAMP_FREQ_16:
             codec_info->sampling_freq = CODEC_INFO_SBC_SF_16K; break;
-        case A2D_SBC_IE_SAMP_FREQ_32:
+        case A2DP_SBC_IE_SAMP_FREQ_32:
             codec_info->sampling_freq = CODEC_INFO_SBC_SF_32K; break;
-        case A2D_SBC_IE_SAMP_FREQ_44:
+        case A2DP_SBC_IE_SAMP_FREQ_44:
             codec_info->sampling_freq = CODEC_INFO_SBC_SF_44K; break;
-        case A2D_SBC_IE_SAMP_FREQ_48:
+        case A2DP_SBC_IE_SAMP_FREQ_48:
             codec_info->sampling_freq = CODEC_INFO_SBC_SF_48K; break;
 
     }
     switch(codec_info->channel_mode) {
-        case A2D_SBC_IE_CH_MD_MONO:
+        case A2DP_SBC_IE_CH_MD_MONO:
             codec_info->channel_mode = CODEC_INFO_SBC_CH_MONO; break;
-        case A2D_SBC_IE_CH_MD_DUAL:
+        case A2DP_SBC_IE_CH_MD_DUAL:
             codec_info->channel_mode = CODEC_INFO_SBC_CH_DUAL; break;
-        case A2D_SBC_IE_CH_MD_STEREO:
+        case A2DP_SBC_IE_CH_MD_STEREO:
             codec_info->channel_mode = CODEC_INFO_SBC_CH_STEREO; break;
-        case A2D_SBC_IE_CH_MD_JOINT:
+        case A2DP_SBC_IE_CH_MD_JOINT:
             codec_info->channel_mode = CODEC_INFO_SBC_CH_JS; break;
     }
     switch(codec_info->block_length) {
-        case A2D_SBC_IE_BLOCKS_4:
+        case A2DP_SBC_IE_BLOCKS_4:
             codec_info->block_length = CODEC_INFO_SBC_BLOCK_4; break;
-        case A2D_SBC_IE_BLOCKS_8:
+        case A2DP_SBC_IE_BLOCKS_8:
             codec_info->block_length = CODEC_INFO_SBC_BLOCK_8; break;
-        case A2D_SBC_IE_BLOCKS_12:
+        case A2DP_SBC_IE_BLOCKS_12:
             codec_info->block_length = CODEC_INFO_SBC_BLOCK_12; break;
-        case A2D_SBC_IE_BLOCKS_16:
+        case A2DP_SBC_IE_BLOCKS_16:
             codec_info->block_length = CODEC_INFO_SBC_BLOCK_16; break;
     }
     switch(codec_info->alloc_method) {
-        case A2D_SBC_IE_ALLOC_MD_S:
+        case A2DP_SBC_IE_ALLOC_MD_S:
             codec_info->alloc_method = CODEC_INFO_SBC_ALLOC_SNR; break;
-        case A2D_SBC_IE_ALLOC_MD_L:
+        case A2DP_SBC_IE_ALLOC_MD_L:
             codec_info->alloc_method = CODEC_INFO_SBC_ALLOC_LOUDNESS; break;
     }
     switch(codec_info->num_subbands) {
-        case A2D_SBC_IE_SUBBAND_4:
+        case A2DP_SBC_IE_SUBBAND_4:
             codec_info->num_subbands = CODEC_INFO_SBC_SUBBAND_4; break;
-        case A2D_SBC_IE_SUBBAND_8:
+        case A2DP_SBC_IE_SUBBAND_8:
             codec_info->num_subbands = CODEC_INFO_SBC_SUBBAND_8; break;
     }
 }
 
-static tA2D_STATUS bcrm_vnd_a2dp_parse_codec_info(tCODEC_INFO_SBC *parsed_info, uint8_t *codec_info)
+static tA2DP_STATUS bcrm_vnd_a2dp_parse_codec_info(tCODEC_INFO_SBC *parsed_info, uint8_t *codec_info)
 {
-    tA2D_STATUS status = A2D_SUCCESS;
+    tA2DP_STATUS status = A2DP_SUCCESS;
     uint8_t   losc;
     uint8_t   mt;
 
     BTA2DPDBG("%s", __FUNCTION__);
 
     if( parsed_info == NULL || codec_info == NULL)
-        status = A2D_FAIL;
+        status = A2DP_FAIL;
     else
     {
         losc    = *codec_info++;
         mt      = *codec_info++;
         /* If the function is called for the wrong Media Type or Media Codec Type */
-        if(losc != A2D_SBC_INFO_LEN || *codec_info != A2D_MEDIA_CT_SBC)
-            status = A2D_WRONG_CODEC;
+        if(losc != A2DP_SBC_INFO_LEN || *codec_info != A2DP_MEDIA_CT_SBC)
+            status = A2DP_WRONG_CODEC;
         else
         {
             codec_info++;
-            parsed_info->sampling_freq = *codec_info & A2D_SBC_IE_SAMP_FREQ_MSK;
-            parsed_info->channel_mode  = *codec_info & A2D_SBC_IE_CH_MD_MSK;
+            parsed_info->sampling_freq = *codec_info & A2DP_SBC_IE_SAMP_FREQ_MSK;
+            parsed_info->channel_mode  = *codec_info & A2DP_SBC_IE_CH_MD_MSK;
             codec_info++;
-            parsed_info->block_length  = *codec_info & A2D_SBC_IE_BLOCKS_MSK;
-            parsed_info->num_subbands  = *codec_info & A2D_SBC_IE_SUBBAND_MSK;
-            parsed_info->alloc_method  = *codec_info & A2D_SBC_IE_ALLOC_MD_MSK;
+            parsed_info->block_length  = *codec_info & A2DP_SBC_IE_BLOCKS_MSK;
+            parsed_info->num_subbands  = *codec_info & A2DP_SBC_IE_SUBBAND_MSK;
+            parsed_info->alloc_method  = *codec_info & A2DP_SBC_IE_ALLOC_MD_MSK;
             codec_info += 2; /* MAX Bitpool */
             parsed_info->bitpool_size  = (*codec_info > BRCM_A2DP_OFFLOAD_MAX_BITPOOL) ?
                                          BRCM_A2DP_OFFLOAD_MAX_BITPOOL : (*codec_info);
 
             if(MULTI_BIT_SET(parsed_info->sampling_freq))
-                status = A2D_BAD_SAMP_FREQ;
+                status = A2DP_BAD_SAMP_FREQ;
             if(MULTI_BIT_SET(parsed_info->channel_mode))
-                status = A2D_BAD_CH_MODE;
+                status = A2DP_BAD_CH_MODE;
             if(MULTI_BIT_SET(parsed_info->block_length))
-                status = A2D_BAD_BLOCK_LEN;
+                status = A2DP_BAD_BLOCK_LEN;
             if(MULTI_BIT_SET(parsed_info->num_subbands))
-                status = A2D_BAD_SUBBANDS;
+                status = A2DP_BAD_SUBBANDS;
             if(MULTI_BIT_SET(parsed_info->alloc_method))
-                status = A2D_BAD_ALLOC_METHOD;
-            if(parsed_info->bitpool_size < A2D_SBC_IE_MIN_BITPOOL || parsed_info->bitpool_size > A2D_SBC_IE_MAX_BITPOOL )
-                status = A2D_BAD_MIN_BITPOOL;
+                status = A2DP_BAD_ALLOC_METHOD;
+            if(parsed_info->bitpool_size < A2DP_SBC_IE_MIN_BITPOOL || parsed_info->bitpool_size > A2DP_SBC_IE_MAX_BITPOOL )
+                status = A2DP_BAD_MIN_BITPOOL;
 
-            if(status == A2D_SUCCESS)
-                brcm_vnd_map_a2d_uipc_codec_info(parsed_info);
+            if(status == A2DP_SUCCESS)
+                brcm_vnd_map_a2dp_uipc_codec_info(parsed_info);
 
             BTA2DPDBG("%s STATUS %d parsed info : SampF %02x, ChnMode %02x, BlockL %02x, NSubB %02x, alloc %02x, bitpool %02x",
                 __FUNCTION__, status, parsed_info->sampling_freq, parsed_info->channel_mode, parsed_info->block_length,
@@ -343,7 +343,7 @@ static tBRCM_VND_A2DP_SST_STATES brcm_vnd_a2dp_sm_idle_process_ev(tBRCM_VND_A2DP
     switch (event) {
         case BRCM_VND_A2DP_OFFLOAD_START_REQ:
             brcm_vnd_a2dp_pdata.offload_params = *(bt_vendor_op_a2dp_offload_t*)ev_data;
-            if (A2D_SUCCESS != bcrm_vnd_a2dp_parse_codec_info( &brcm_vnd_a2dp_pdata.codec_info,
+            if (A2DP_SUCCESS != bcrm_vnd_a2dp_parse_codec_info( &brcm_vnd_a2dp_pdata.codec_info,
                     (uint8_t *)brcm_vnd_a2dp_pdata.offload_params.codec_info)) {
                 ALOGE("%s CodecConfig BT_VND_OP_A2DP_OFFLOAD_START FAILED", __FUNCTION__);
                 bt_vendor_cbacks->a2dp_offload_cb(BT_VND_OP_RESULT_FAIL, BT_VND_OP_A2DP_OFFLOAD_START,
@@ -370,7 +370,7 @@ static tBRCM_VND_A2DP_SST_STATES brcm_vnd_a2dp_sm_starting_process_ev(tBRCM_VND_
         case BRCM_VND_A2DP_OFFLOAD_START_REQ:
             brcm_vnd_a2dp_offload_cleanup();
             brcm_vnd_a2dp_pdata.offload_params = *(bt_vendor_op_a2dp_offload_t*)ev_data;
-            if (A2D_SUCCESS != bcrm_vnd_a2dp_parse_codec_info(
+            if (A2DP_SUCCESS != bcrm_vnd_a2dp_parse_codec_info(
                     &brcm_vnd_a2dp_pdata.codec_info, (uint8_t *)brcm_vnd_a2dp_pdata.offload_params.codec_info)) {
                 ALOGE("%s CodecConfig BT_VND_OP_A2DP_OFFLOAD_START FAILED", __FUNCTION__);
                 bt_vendor_cbacks->a2dp_offload_cb(BT_VND_OP_RESULT_FAIL, BT_VND_OP_A2DP_OFFLOAD_START,
@@ -478,7 +478,7 @@ static tBRCM_VND_A2DP_SST_STATES brcm_vnd_a2dp_sm_stream_process_ev(tBRCM_VND_A2
         case BRCM_VND_A2DP_OFFLOAD_START_REQ:
             brcm_vnd_a2dp_offload_cleanup();
             brcm_vnd_a2dp_pdata.offload_params = *(bt_vendor_op_a2dp_offload_t*)ev_data;
-            if (A2D_SUCCESS != bcrm_vnd_a2dp_parse_codec_info(
+            if (A2DP_SUCCESS != bcrm_vnd_a2dp_parse_codec_info(
                     &brcm_vnd_a2dp_pdata.codec_info, (uint8_t *)brcm_vnd_a2dp_pdata.offload_params.codec_info)) {
                 ALOGE("%s CodecConfig BT_VND_OP_A2DP_OFFLOAD_START FAILED", __FUNCTION__);
                 bt_vendor_cbacks->a2dp_offload_cb(BT_VND_OP_RESULT_FAIL, BT_VND_OP_A2DP_OFFLOAD_START,
