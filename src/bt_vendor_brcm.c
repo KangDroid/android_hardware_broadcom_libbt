@@ -148,10 +148,12 @@ static int op(bt_vendor_opcode_t opcode, void *param)
         case BT_VND_OP_POWER_CTRL:
             {
                 int *state = (int *) param;
-                if (*state == BT_VND_PWR_OFF)
-                    upio_set_bluetooth_power(UPIO_BT_POWER_OFF);
-                else if (*state == BT_VND_PWR_ON)
+                upio_set_bluetooth_power(UPIO_BT_POWER_OFF);
+                if (*state == BT_VND_PWR_ON)
+                {
+                    ALOGW("NOTE: BT_VND_PWR_ON now forces power-off first");
                     upio_set_bluetooth_power(UPIO_BT_POWER_ON);
+                }
             }
             break;
 
