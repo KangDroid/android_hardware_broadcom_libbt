@@ -153,6 +153,9 @@ static int op(bt_vendor_opcode_t opcode, void *param)
                 {
                     ALOGW("NOTE: BT_VND_PWR_ON now forces power-off first");
                     upio_set_bluetooth_power(UPIO_BT_POWER_ON);
+                } else {
+                    /* Make sure wakelock is released */
+                    hw_lpm_set_wake_state(false);
                 }
             }
             break;
