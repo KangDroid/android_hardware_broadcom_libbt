@@ -222,6 +222,13 @@ static int op(bt_vendor_opcode_t opcode, void *param)
             }
             break;
 
+        case BT_WORKROUND_SHAMU_FIX:
+            {
+				uint8_t *statetwo = (uint8_t *) param;
+                hw_lpm_set_wake_state(TRUE);
+            }
+            break;
+
          case BT_VND_OP_SET_AUDIO_STATE:
             {
                 retval = hw_set_audio_state((bt_vendor_op_audio_state_t *)param);
